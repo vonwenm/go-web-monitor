@@ -2,8 +2,8 @@ package services
 
 import (
 	"fmt"
+	"go-web-monitor/models"
 	"io/ioutil"
-	"monitor/models"
 	"strings"
 	"time"
 )
