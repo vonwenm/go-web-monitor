@@ -2,8 +2,8 @@ package main
 
 import (
 	"github.com/astaxie/beego"
-	"monitor/controllers"
-	"monitor/services"
+	"go-web-monitor/controllers"
+	"go-web-monitor/services"
 )
 
 func main() {
