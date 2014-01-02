@@ -10,12 +10,17 @@ import (
 
 var webs []models.Web
 
+var adminMail string
+var adminPwd string
+var adminMailHost string
+
 /**
  *init function.
  *read uri from local file,
  *and start the monitor server.
  */
 func MonitorInit() {
+	readSystemAdminMailConfFormFile()
 	readUriFromFile()
 	startTiker()
 }
@@ -24,7 +29,7 @@ func MonitorInit() {
  *read uri from local file
  */
 func readUriFromFile() {
-	b, err := ioutil.ReadFile("views/urls.txt")
+	b, err := ioutil.ReadFile("conf/urls.conf")
 	if err != nil {
 		panic(err)
 	}
@@ -42,7 +47,39 @@ func readUriFromFile() {
 		admin.Mail = eArray[1]
 		web.Url = eArray[0]
 		web.Admin = *admin
+
+		systemAdmin := new(models.SystemAdmin)
+		systemAdmin.SystemMail = adminMail
+		systemAdmin.SystemPwd = adminPwd
+		systemAdmin.SystemHost = adminMailHost
+		web.SystemAdmin = *systemAdmin
 		webs[i] = *web
+	}
+}
+
+/**
+ *read system mail form local conf file
+ */
+func readSystemAdminMailConfFormFile() {
+	b, err := ioutil.ReadFile("conf/admin.conf")
+	if err != nil {
+		panic(err)
+	}
+
+	adminConfs := string(b)
+	var confArray = strings.Split(adminConfs, "\n")
+	fmt.Println(len(confArray))
+	for _, array := range confArray {
+		cArray := strings.Split(array, "#")
+
+		switch cArray[0] {
+		case "adminMail":
+			adminMail = cArray[1]
+		case "adminPwd":
+			adminPwd = cArray[1]
+		case "mailHost":
+			adminMailHost = cArray[1]
+		}
 	}
 }
 
@@ -51,7 +88,7 @@ func readUriFromFile() {
  */
 func startTiker() {
 	startMonitor()
-	ticker := time.NewTicker(20 * 60 * time.Second)
+	ticker := time.NewTicker(60 * time.Second)
 	quit := make(chan struct{})
 	var i int
 	go func() {

@@ -5,12 +5,6 @@ import (
 	"strings"
 )
 
-const (
-	AdminMail = "monitior_server@sina.com"
-	AdminPass = "QWERASDF%"
-	AdminHost = "smtp.sina.com:25"
-)
-
 /*
  *	user : example@example.com login smtp server user
  *	password: xxxxx login smtp server password
